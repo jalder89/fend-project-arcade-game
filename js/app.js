@@ -1,3 +1,8 @@
+// Initialize some Variables
+// Min/Max Enemy Speed
+let min = 60;
+let max = 150;
+
 // Enemies our player must avoid
 var Enemy = function(x, y, s) {
     // Variables applied to each of our instances go here,
@@ -26,7 +31,7 @@ Enemy.prototype.update = function(dt) {
     // If enemy moves off the canvas, reset and randomize speed
     if (this.x > 606) {
       this.x = -100;
-      let enSpeed = Math.floor(Math.random() * 5);
+      let enSpeed = Math.floor(Math.random() * (max - min)) + min;
       this.speed = enSpeed;
     }
 
@@ -65,12 +70,14 @@ Player.prototype.render = function () {
 
 
 // Now instantiate your objects.
-const enemy1 = new Enemy();
+const enemy1 = new Enemy(-100, 60, 250);
+const enemy2 = new Enemy(-100, 142, 250);
+const enemy3 = new Enemy(-100, 228, 250);
 
 const character = new Player();
 
 // Place all enemy objects in an array called allEnemies
-const allEnemies = [enemy1];
+const allEnemies = [enemy1, enemy2, enemy3];
 
 // Place the player object in a variable called player
 let player = character;
