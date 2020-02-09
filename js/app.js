@@ -68,13 +68,29 @@ Player.prototype.render = function () {
 
 };
 
+// Handle player input during game
+Player.prototype.handleInput = function (keyPress) {
+  console.log(keyPress);
+
+  if (keyPress == 'left'){
+    this.x += (-101);
+  } else if (keyPress == 'right') {
+    this.x += 101;
+  } else if (keyPress == 'up') {
+    this.y += (-84);
+  } else if (keyPress == 'down') {
+    this.y += 84;
+  }
+
+};
+
 
 // Now instantiate your objects.
 const enemy1 = new Enemy(-100, 60, 250);
 const enemy2 = new Enemy(-100, 142, 250);
 const enemy3 = new Enemy(-100, 228, 250);
 
-const character = new Player();
+const character = new Player(202, 404);
 
 // Place all enemy objects in an array called allEnemies
 const allEnemies = [enemy1, enemy2, enemy3];
