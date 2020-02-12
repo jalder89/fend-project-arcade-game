@@ -1,7 +1,25 @@
 // Initialize some Variables
 // Min/Max Enemy Speed
-let min = 60;
-let max = 150;
+const min = 60;
+const max = 150;
+let ecounter = 0;
+
+// Distance between two objects for box collision detection.
+// Thanks to Chris Courses for the insight into
+// simple collision detection and shout out to my man Pythagoras for his theorem
+// Adapted from: https://www.youtube.com/watch?v=XYzA_kPWyJ8
+function getXDist (x1, x2){
+  let xDist = x2 - x1;
+
+  return Math.sqrt(Math.pow(xDist, 2));
+}
+
+function getYDist (y1, y2){
+  let yDist = y2 - y1;
+
+  return Math.sqrt(Math.pow(yDist, 2));
+
+}
 
 // Enemies our player must avoid
 var Enemy = function(x, y, s) {
@@ -16,6 +34,8 @@ var Enemy = function(x, y, s) {
     this.x = x;
     this.y = y;
     this.speed = s;
+    ecounter += 1;
+    this.name = "enemy" + ecounter;
 };
 
 // Update the enemy's position, required method for game
@@ -31,10 +51,19 @@ Enemy.prototype.update = function(dt) {
     // If enemy moves off the canvas, reset and randomize speed
     if (this.x > 606) {
       this.x = -100;
-      let enSpeed = Math.floor(Math.random() * (max - min)) + min;
+      enSpeed = Math.floor(Math.random() * (max - min)) + min;
       this.speed = enSpeed;
     }
 
+    // Get distance of this enemy from player
+    exdist = getXDist(this.x, player.x);
+    eydist = getYDist(this.y, player.y);
+
+    // Collision logic if enemy and player collide
+    if (exdist < 84 && eydist < 50) {
+      this.speed = 0;
+      console.log(this.name + " hit!");
+    }
 
 };
 
@@ -72,14 +101,18 @@ Player.prototype.render = function () {
 Player.prototype.handleInput = function (keyPress) {
   console.log(keyPress);
 
-  if (keyPress == 'left'){
+  if (keyPress == 'left' && this.x != 0){
     this.x += (-101);
-  } else if (keyPress == 'right') {
+    console.log(this.x);
+  } else if (keyPress == 'right' && this.x != 404) {
     this.x += 101;
-  } else if (keyPress == 'up') {
+    console.log(this.x);
+  } else if (keyPress == 'up' && this.y != -16) {
     this.y += (-84);
-  } else if (keyPress == 'down') {
+    console.log(this.y);
+  } else if (keyPress == 'down' && this.y != 404) {
     this.y += 84;
+    console.log(this.y);
   }
 
 };
