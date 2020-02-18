@@ -3,7 +3,8 @@
 const min = 60;
 const max = 150;
 let ecounter = 0;
-
+let winSound = document.getElementById('winSound');
+let loseSound = document.getElementById('loseSound');
 
 
 
@@ -63,6 +64,10 @@ Enemy.prototype.checkCollision = function() {
   if (exdist < 84 && eydist < 50) {
     this.speed = 0;
     console.log(this.name + " hit!");
+
+    loseSound.pause();
+    loseSound.currentTime = 0;
+    loseSound.play();
 
     // Reset all enemies and randomize speed
     enemy1.reset();
@@ -153,6 +158,10 @@ Player.prototype.reset = function() {
 
 Player.prototype.checkForWin = function() {
   if (this.y == -16) {
+
+    winSound.pause();
+    winSound.currentTime = 0;
+    winSound.play();
 
     enemy1.reset();
     enemy2.reset();
