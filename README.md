@@ -9,9 +9,13 @@
 
 Frogger Clone 1.0
 
-To start the game, simply load the frogger.html web page. The game starts automatically with the bugs making a quick race across the screen.
+To start the game, simply load the frogger.html web page on any desktop.(Mobile not yet supported)
 
-To play the game simply use the arrow keys to move the character to the water/river and avoid the deadly bugs!
+The game starts automatically with the bugs making a quick race across the screen.
+
+To play:
+
+Use the arrow keys to move the character to the water/river and avoid the deadly bugs!
 
 The game currently has no 'end' but it does react to win lose conditions with sound effects and a position reset.
 
