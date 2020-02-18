@@ -4,25 +4,11 @@ const min = 60;
 const max = 150;
 let ecounter = 0;
 
-// Distance between two objects for box collision detection.
-// Thanks to Chris Courses for the insight into
-// simple collision detection and shout out to my man Pythagoras for his theorem
-// Adapted from: https://www.youtube.com/watch?v=XYzA_kPWyJ8
-function getXDist (x1, x2){
-  let xDist = x2 - x1;
 
-  return Math.sqrt(Math.pow(xDist, 2));
-}
 
-function getYDist (y1, y2){
-  let yDist = y2 - y1;
-
-  return Math.sqrt(Math.pow(yDist, 2));
-
-}
 
 // Enemies our player must avoid
-var Enemy = function(x, y, s) {
+let Enemy = function(x, y, s) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -30,13 +16,62 @@ var Enemy = function(x, y, s) {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
 
+    // End prebuilt
     // Variables for enemy position and speed
     this.x = x;
     this.y = y;
     this.speed = s;
     ecounter += 1;
     this.name = "enemy" + ecounter;
+    exdist = 0;
+    eydist = 0;
+
+
+
 };
+
+// Get distance from player
+Enemy.prototype.getDistance = function() {
+
+  // Distance between two objects for box collision detection.
+  // Thanks to Chris Courses for the insight into
+  // simple collision detection and shout out to my man Pythagoras for his theorem
+  // Adapted from: https://www.youtube.com/watch?v=XYzA_kPWyJ8
+  function getXDist (x1, x2){
+    let xDist = x2 - x1;
+
+    return Math.sqrt(Math.pow(xDist, 2));
+  }
+
+  function getYDist (y1, y2){
+    let yDist = y2 - y1;
+
+    return Math.sqrt(Math.pow(yDist, 2));
+
+  }
+
+  // Get distance of this enemy from player
+  exdist = getXDist(this.x, player.x);
+  eydist = getYDist(this.y, player.y);
+
+}
+
+// Check for collision with player
+Enemy.prototype.checkCollision = function() {
+
+  // Collision logic if enemy and player collide
+  if (exdist < 84 && eydist < 50) {
+    this.speed = 0;
+    console.log(this.name + " hit!");
+  }
+
+}
+
+Enemy.prototype.reset = function() {
+  this.x = -100;
+  enSpeed = Math.floor(Math.random() * (max - min)) + min;
+  this.speed = enSpeed;
+}
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -50,20 +85,14 @@ Enemy.prototype.update = function(dt) {
 
     // If enemy moves off the canvas, reset and randomize speed
     if (this.x > 606) {
-      this.x = -100;
-      enSpeed = Math.floor(Math.random() * (max - min)) + min;
-      this.speed = enSpeed;
+      for (enemy of allEnemies) {
+        this.reset();
+      }
     }
 
-    // Get distance of this enemy from player
-    exdist = getXDist(this.x, player.x);
-    eydist = getYDist(this.y, player.y);
-
-    // Collision logic if enemy and player collide
-    if (exdist < 84 && eydist < 50) {
-      this.speed = 0;
-      console.log(this.name + " hit!");
-    }
+    // Get distance from player and check for collision
+    this.getDistance();
+    this.checkCollision();
 
 };
 
@@ -75,7 +104,6 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-
 let Player = function(x, y) {
 
   // The image sprite for our player.
@@ -129,12 +157,12 @@ const character = new Player(202, 404);
 const allEnemies = [enemy1, enemy2, enemy3];
 
 // Place the player object in a variable called player
-let player = character;
+const player = character;
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
+    let allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
