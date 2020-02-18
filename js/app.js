@@ -54,24 +54,39 @@ Enemy.prototype.getDistance = function() {
   exdist = getXDist(this.x, player.x);
   eydist = getYDist(this.y, player.y);
 
-}
+};
 
-// Check for collision with player
+// Check for collision with player or edge of board
 Enemy.prototype.checkCollision = function() {
 
   // Collision logic if enemy and player collide
   if (exdist < 84 && eydist < 50) {
     this.speed = 0;
     console.log(this.name + " hit!");
+
+    // Reset all enemies and randomize speed
+    enemy1.reset();
+    enemy2.reset();
+    enemy3.reset();
+
+    // Reset player to starting position
+    player.reset();
   }
 
-}
+  // If enemy moves off the canvas, reset and randomize speed
+  if (this.x > 606) {
+    for (enemy of allEnemies) {
+      this.reset();
+    }
+  }
+
+};
 
 Enemy.prototype.reset = function() {
   this.x = -100;
   enSpeed = Math.floor(Math.random() * (max - min)) + min;
   this.speed = enSpeed;
-}
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -83,15 +98,10 @@ Enemy.prototype.update = function(dt) {
     // Updates enemies horizontal movement speed
     this.x += this.speed * dt;
 
-    // If enemy moves off the canvas, reset and randomize speed
-    if (this.x > 606) {
-      for (enemy of allEnemies) {
-        this.reset();
-      }
-    }
-
-    // Get distance from player and check for collision
+    // Get distance from player
     this.getDistance();
+
+    // Check for player or board collision
     this.checkCollision();
 
 };
@@ -114,15 +124,6 @@ let Player = function(x, y) {
   this.x = x;
   this.y = y;
 
-}
-
-Player.prototype.update = function(dt) {
-
-}
-
-Player.prototype.render = function () {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-
 };
 
 // Handle player input during game
@@ -142,6 +143,32 @@ Player.prototype.handleInput = function (keyPress) {
     this.y += 84;
     console.log(this.y);
   }
+
+};
+
+Player.prototype.reset = function() {
+  this.x = 202;
+  this.y = 404;
+};
+
+Player.prototype.checkForWin = function() {
+  if (this.y == -16) {
+
+    enemy1.reset();
+    enemy2.reset();
+    enemy3.reset();
+    player.reset();
+
+  }
+
+};
+
+Player.prototype.update = function(dt) {
+  player.checkForWin();
+};
+
+Player.prototype.render = function () {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 
 };
 
